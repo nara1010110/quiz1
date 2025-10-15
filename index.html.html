@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSK1 词汇练习 - Vocabulaire HSK1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #7b1fa2 0%, #1976d2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .score-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50, #2196f3);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .question-area {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .question-label {
+            color: #666;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        
+        .french-word {
+            font-size: 3em;
+            font-weight: bold;
+            color: #7b1fa2;
+            margin-bottom: 20px;
+        }
+        
+        .pinyin-btn {
+            background: #fff3e0;
+            color: #f57c00;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .pinyin-btn:hover {
+            background: #ffe0b2;
+            transform: translateY(-2px);
+        }
+        
+        .pinyin-display {
+            font-size: 1.3em;
+            color: #f57c00;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+        
+        .input-area {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .chinese-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px;
+            font-size: 1.5em;
+            text-align: center;
+            border: 3px solid #e0e0e0;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .chinese-input:focus {
+            border-color: #7b1fa2;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #7b1fa2, #1976d2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(123, 31, 162, 0.3);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .feedback-area {
+            text-align: center;
+        }
+        
+        .feedback-result {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .correct {
+            color: #4caf50;
+        }
+        
+        .incorrect {
+            color: #f44336;
+        }
+        
+        .encouragement {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #4caf50;
+            font-weight: 500;
+        }
+        
+        .answer-display {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .answer-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .correct-chinese {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #7b1fa2;
+            margin-bottom: 8px;
+        }
+        
+        .correct-pinyin {
+            font-size: 1.2em;
+            color: #f57c00;
+        }
+        
+        .next-btn {
+            background: linear-gradient(135deg, #4caf50, #009688);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .completion-screen {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .completion-title {
+            font-size: 2.5em;
+            color: #7b1fa2;
+            margin-bottom: 30px;
+        }
+        
+        .final-score {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .score-number {
+            font-size: 4em;
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .score-total {
+            font-size: 1.3em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .final-message {
+            font-size: 1.2em;
+            color: #7b1fa2;
+            font-weight: 500;
+        }
+        
+        .restart-btn {
+            background: linear-gradient(135deg, #7b1fa2, #1976d2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(123, 31, 162, 0.3);
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>HSK1 词汇练习</h1>
+            <p>Vocabulaire HSK1 - Test de Production</p>
+            <div class="score-info">
+                <div>Question <span id="current-q">1</span> / <span id="total-q">10</span></div>
+                <div>Score: <span id="score">0</span> points</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div id="quiz-area">
+                <div class="question-area">
+                    <div class="question-label">Traduisez en chinois :</div>
+                    <div class="french-word" id="french-word">Bonjour</div>
+                    <button class="pinyin-btn" id="pinyin-btn" onclick="togglePinyin()">显示 Pinyin</button>
+                    <div class="pinyin-display hidden" id="pinyin-display">nǐ hǎo</div>
+                </div>
+                
+                <div class="input-area" id="input-area">
+                    <input type="text" class="chinese-input" id="user-input" placeholder="Tapez les caractères chinois..." onkeypress="handleKeyPress(event)">
+                    <br>
+                    <button class="submit-btn" id="submit-btn" onclick="submitAnswer()">Valider 确认</button>
+                </div>
+                
+                <div class="feedback-area hidden" id="feedback-area">
+                    <div class="feedback-result" id="feedback-result">✅ Correct !</div>
+                    <div class="encouragement hidden" id="encouragement">Excellent ! 太棒了！</div>
+                    <div class="answer-display">
+                        <div class="answer-label">Réponse correcte :</div>
+                        <div class="correct-chinese" id="correct-chinese">你好</div>
+                        <div class="correct-pinyin" id="correct-pinyin">nǐ hǎo</div>
+                    </div>
+                    <button class="next-btn" onclick="nextQuestion()">Question suivante 下一题</button>
+                </div>
+            </div>
+            
+            <div class="completion-screen hidden" id="completion-screen">
+                <h2 class="completion-title">Quiz Terminé ! 完成了！</h2>
+                <div class="final-score">
+                    <div class="score-number" id="final-score">0</div>
+                    <div class="score-total">/ 100 points</div>
+                    <div class="final-message" id="final-message">🎉 Incroyable ! Vous maîtrisez parfaitement ces mots ! 完美！</div>
+                </div>
+                <button class="restart-btn" onclick="restartQuiz()">Recommencer 重新开始</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { french: "Bonjour", chinese: "你好", pinyin: "nǐ hǎo" },
+            { french: "Je/Moi", chinese: "我", pinyin: "wǒ" },
+            { french: "Il/Lui", chinese: "他", pinyin: "tā" },
+            { french: "Être", chinese: "是", pinyin: "shì" },
+            { french: "Matin/Tôt", chinese: "早", pinyin: "zǎo" },
+            { french: "Soir/Tard", chinese: "晚", pinyin: "wǎn" },
+            { french: "Eau", chinese: "水", pinyin: "shuǐ" },
+            { french: "Montagne", chinese: "山", pinyin: "shān" },
+            { french: "Bon", chinese: "好", pinyin: "hǎo" },
+            { french: "Midi", chinese: "午", pinyin: "wǔ" }
+        ];
+
+        const encouragements = [
+            "Excellent ! 太棒了！",
+            "Très bien ! 很好！",
+            "Parfait ! 完美！",
+            "Bravo ! 干得好！",
+            "Magnifique ! 棒极了！"
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let showingPinyin = false;
+
+        function updateDisplay() {
+            document.getElementById('current-q').textContent = currentQuestion + 1;
+            document.getElementById('french-word').textContent = questions[currentQuestion].french;
+            document.getElementById('pinyin-display').textContent = questions[currentQuestion].pinyin;
+            document.getElementById('correct-chinese').textContent = questions[currentQuestion].chinese;
+            document.getElementById('correct-pinyin').textContent = questions[currentQuestion].pinyin;
+            
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+            
+            document.getElementById('score').textContent = score;
+            
+            // Reset states
+            document.getElementById('user-input').value = '';
+            document.getElementById('input-area').classList.remove('hidden');
+            document.getElementById('feedback-area').classList.add('hidden');
+            document.getElementById('pinyin-display').classList.add('hidden');
+            document.getElementById('pinyin-btn').textContent = '显示 Pinyin';
+            showingPinyin = false;
+            
+            document.getElementById('user-input').focus();
+        }
+
+        function togglePinyin() {
+            const pinyinDisplay = document.getElementById('pinyin-display');
+            const pinyinBtn = document.getElementById('pinyin-btn');
+            
+            if (showingPinyin) {
+                pinyinDisplay.classList.add('hidden');
+                pinyinBtn.textContent = '显示 Pinyin';
+            } else {
+                pinyinDisplay.classList.remove('hidden');
+                pinyinBtn.textContent = '隐藏 Pinyin';
+            }
+            showingPinyin = !showingPinyin;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                const userInput = document.getElementById('user-input').value.trim();
+                if (userInput) {
+                    submitAnswer();
+                }
+            }
+        }
+
+        function submitAnswer() {
+            const userAnswer = document.getElementById('user-input').value.trim();
+            const correct = userAnswer === questions[currentQuestion].chinese;
+            
+            document.getElementById('input-area').classList.add('hidden');
+            document.getElementById('feedback-area').classList.remove('hidden');
+            
+            if (correct) {
+                score += 10;
+                document.getElementById('score').textContent = score;
+                document.getElementById('feedback-result').textContent = '✅ Correct !';
+                document.getElementById('feedback-result').className = 'feedback-result correct';
+                
+                const randomEncouragement = encouragements[Math.floor(Math.random() * encouragements.length)];
+                document.getElementById('encouragement').textContent = randomEncouragement;
+                document.getElementById('encouragement').classList.remove('hidden');
+            } else {
+                document.getElementById('feedback-result').textContent = '❌ Incorrect';
+                document.getElementById('feedback-result').className = 'feedback-result incorrect';
+                document.getElementById('encouragement').classList.add('hidden');
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                updateDisplay();
+            } else {
+                showCompletion();
+            }
+        }
+
+        function showCompletion() {
+            document.getElementById('quiz-area').classList.add('hidden');
+            document.getElementById('completion-screen').classList.remove('hidden');
+            document.getElementById('final-score').textContent = score;
+            
+            const percentage = (score / (questions.length * 10)) * 100;
+            let message;
+            if (percentage >= 90) message = "🎉 Incroyable ! Vous maîtrisez parfaitement ces mots ! 完美！";
+            else if (percentage >= 70) message = "🌟 Très bien ! Vous êtes sur la bonne voie ! 很好！";
+            else if (percentage >= 50) message = "👍 Bon travail ! Continuez à pratiquer ! 加油！";
+            else message = "💪 Courage ! La pratique rend parfait ! 继续努力！";
+            
+            document.getElementById('final-message').textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('quiz-area').classList.remove('hidden');
+            document.getElementById('completion-screen').classList.add('hidden');
+            updateDisplay();
+        }
+
+        // Initialize the quiz
+        updateDisplay();
+    </script>
+</body>
+</html>
